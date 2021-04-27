@@ -10,7 +10,8 @@ PING_CMD = "ping %s -l 200 -w 100000 -n 1" % UE_ADDRESS
 
 def write_log(log):
     with open("ping.log", "a+", encoding="utf-8") as f:
-        cur_time = str(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())))
+        cur_time = str(
+            time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())))
         f.write(cur_time + ":" + log + "\n")
         f.close()
 
