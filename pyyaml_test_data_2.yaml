@@ -1,0 +1,13 @@
+cities:
+  - Nanjing
+  - Beijing
+  - Shanghai
+  - tianjin
+  - shenzhen
+---
+companies:
+  - HuaWei
+  - Zte
+  - Alibaba
+  - Tencent
+  - Baidu
