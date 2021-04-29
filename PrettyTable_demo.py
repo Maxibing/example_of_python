@@ -103,3 +103,23 @@ with open("data.html", "r") as fp:
 
 x = from_html_one(html)
 '''
+############################
+# Color print
+y = PrettyTable()
+y.field_names = ["Color", "Display"]
+y.align["Color"] = "l"
+y.align["Display"] = "r"
+
+#Color
+R = "\033[0;31;40m" #RED
+G = "\033[0;32;40m" # GREEN
+Y = "\033[0;33;40m" # Yellow
+B = "\033[0;34;40m" # Blue
+N = "\033[0m" # Reset
+
+y.add_row(["RED", f"{R}This is Red{N}"])
+y.add_row(["GREEN", f"{G}This is Green{N}"])
+y.add_row(["Yellow", f"{Y}This is Yellow{N}"])
+y.add_row(["Blue", f"{B}This is Blue{N}"])
+
+print(y)
