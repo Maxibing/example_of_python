@@ -26,7 +26,14 @@ filter() 函数用于过滤序列，过滤掉不符合条件的元素
     filter 类实现了 __iter__ 和 __next__ 方法, 可以看成是一个迭代器, 有惰性运算的特性, 相对 Python2.x 提升了性能, 可以节约内存。
 
 '''
+def _judge(i):
+    if i > 7:
+        return i
+
 s = [1,2,8,9,10]
 
+print(list(filter(_judge, s)))
+
+# 配合匿名函数lambda使用
 print(list(filter(lambda x:x > 5, s)))
 
