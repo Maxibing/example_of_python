@@ -15,13 +15,6 @@ s1 = str(b1, encoding="utf-8")
 
 # bytes -> hex
 h = b1.hex()
-=======
-s = "hello world"
-b = s.encode()
-b1 = b"hello world"
-
-# bytes -> hex
-h = b.hex()
 
 # hex -> bytes
 b2 = bytes.fromhex(h)
@@ -29,7 +22,6 @@ b2 = bytes.fromhex(h)
 # hex -> bin
 b=bin(int("0201200B00",16))[2:]
 
-=======
 # int -> hex
 i = 55
 h1 = hex(i)
