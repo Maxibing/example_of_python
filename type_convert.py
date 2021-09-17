@@ -19,8 +19,15 @@ h = b1.hex()
 # hex -> bytes
 b2 = bytes.fromhex(h)
 
+
+# hex -> int
+i = int("0201200B00",base=16)
+
 # hex -> bin
 b=bin(int("0201200B00",16))[2:]
+
+# int -> bits
+i1 = int(b, base=2)
 
 # int -> hex
 i = 55
