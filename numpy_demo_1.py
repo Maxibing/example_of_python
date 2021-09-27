@@ -217,3 +217,289 @@ print(f"Iterate 3-D array by np.nditer()")
 for x in np.nditer(arr_3):
     print(x)
 
+# 迭代时更改元素类型
+# NumPy 不会就地更改元素的数据类型（元素位于数组中），因此它需要一些其他空间来执行此操作，
+# 该额外空间称为 buffer，为了在 nditer() 中启用它，我们传参 flags=['buffered']。
+arr = np.array([1,2,3])
+print(f"Iterate array {arr} with change element's dtype:")
+for x in np.nditer(arr, flags=['buffered'], op_dtypes="S"):
+    print(x)
+
+# 以不同步长迭代
+arr = np.array([[1,2,3,4], [5,6,7,8]])
+print(f"Iterate array {arr} with step 2")
+for x in np.nditer(arr[:, ::2]):
+    print(x)
+
+# 使用ndenumerate()进行枚举迭代
+# 枚举是指逐一提及事物的序号
+# 有时，我们在迭代时需要元素的相应索引，对于这些用例，可以使用ndenumerate()
+arr = np.array([[1,2,3], [4,5,6]])
+print(f"Iterate array {arr} with ndenumerate():")
+for idx, x in np.ndenumerate(arr):
+    print(idx, x)
+
+###################################################################
+###################################################################
+
+'''
+数组连接
+
+连接意味着将两个或多个数组的内容放在单个数组中。
+在 SQL 中，我们基于键来连接表，而在 NumPy 中，我们按轴连接数组。
+我们传递了一系列要与轴一起连接到 concatenate() 函数的数组。如果未显式传递轴（axis），则将其视为 0。
+'''
+# 连接两个1-D数组
+arr_1 = np.array([1,2,3])
+arr_2 = np.array([4,5,6])
+arr = np.concatenate((arr_1, arr_2))
+print(f"Use np.concatenate() to connect arr_1 {arr_1} and arr_2 {arr_2}, result is:{arr}")
+
+# 沿着行(axis=1)和沿着列(axis=0)连接两个2-D数组：
+arr_1 = np.array([[1,2,3], [4,5,6]])
+arr_2 = np.array([[7,8,9], [10,11,12]])
+arr_axis_0 = np.concatenate((arr_1, arr_2), axis=0)
+arr_axis_1 = np.concatenate((arr_1, arr_2), axis=1)
+print(f"np.concatenate((arr_1, arr_2), axis=0) =  {arr_axis_0}")
+print(f"np.concatenate((arr_1, arr_2), axis=1) = {arr_axis_1}")
+
+# 使用堆栈函数连接数组
+# 堆栈与级联相同，唯一的不同是堆栈是沿着新轴完成的。
+# 我们可以沿着第二个轴连接两个一维数组，这将导致它们彼此重叠，即，堆叠（stacking）。
+# 我们传递了一系列要与轴一起连接到 concatenate() 方法的数组。如果未显式传递轴，则将其视为 0。
+arr_1 = np.array([1,2,3])
+arr_2 = np.array([4,5,6])
+arr_axis_0 = np.stack((arr_1, arr_2), axis=0)
+arr_axis_1 = np.stack((arr_1, arr_2), axis=1)
+print(f"np.stack((arr_1, arr_2), axis=0) =  {arr_axis_0}")
+print(f"np.stack((arr_1, arr_2), axis=1) = {arr_axis_1}")
+
+# 沿行堆叠
+arr1 = np.array([1, 2, 3])
+arr2 = np.array([4, 5, 6])
+arr = np.hstack((arr1, arr2))
+print(f"np.hstack((arr1, arr2)) = {arr}")
+
+# 沿列堆叠
+arr1 = np.array([1, 2, 3])
+arr2 = np.array([4, 5, 6])
+arr = np.vstack((arr1, arr2))
+print(f"np.vstack((arr1, arr2)) = {arr}")
+
+# 沿高度堆叠
+arr1 = np.array([1, 2, 3])
+arr2 = np.array([4, 5, 6])
+arr = np.dstack((arr1, arr2))
+print(f"np.dstack((arr1, arr2)) = {arr}")
+
+###################################################################
+###################################################################
+'''
+数组拆分
+
+拆分是连接的反向操作。
+连接（Joining）是将多个数组合并为一个，拆分（Spliting）将一个数组拆分为多个。
+使用 array_split() 分割数组，将要分割的数组和分割数传递给它。
+'''
+# 将数组分为3部分
+arr = np.array([1, 2, 3, 4, 5, 6])
+newarr = np.array_split(arr, 3)
+print(f"np.array_split({arr}, 3) = {newarr}")
+
+# 如果数组中的元素少于要求的数量，它将从末尾进行相应调整。
+# 也有 split()方法可用，但是当源数组中的元素较少用于拆分时，它将不会调整元素，如下例，array_split() 正常工作，但 split() 会失败。
+arr = np.array([1, 2, 3, 4, 5, 6])
+newarr = np.array_split(arr, 4)
+print(f"np.array_split({arr}, 4) = {newarr}")
+
+# 访问拆分的数组
+print(f"newarr[0]: {newarr[0]}")
+
+# 分割二维数组
+arr = np.array([[1, 2], [3, 4], [5, 6], [7, 8], [9, 10], [11, 12]])
+newarr = np.array_split(arr, 3)
+print(f"np.array_split({arr}, 3) = {newarr}")
+
+# 沿行将2-D拆分为3个数组
+arr = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12], [13, 14, 15], [16, 17, 18]])
+newarr = np.array_split(arr, 3, axis=1)
+print(f"newarr = np.array_split({arr}, 3, axis=1)\n{newarr}")
+
+# 另一种方法是使用与hstack()相反的hsplit()
+newarr = np.hsplit(arr, 3)
+print(f"np.hsplit({arr}, 3)\n{newarr}")
+
+###################################################################
+###################################################################
+'''
+数组搜索
+
+可以在数组中搜索（检索）某个值，然后返回获得匹配的索引。
+要搜索数组，请使用 where() 方法。
+'''
+# 查找值为4的索引
+arr = np.array([1,2,3,4,4,4,4])
+x = np.where(arr == 4)
+print(f"np.where(arr == 4): {x}")
+
+# 查找值为偶数的索引
+x = np.where(arr%2 == 0)
+print(f"np.where(arr%2 == 0): {x}")
+
+# 搜索排序
+# 有一个名为 searchsorted() 的方法，该方法在数组中执行二进制搜索，并返回将在其中插入指定值以维持搜索顺序的索引。
+# 假定 searchsorted() 方法用于排序数组。
+# 定义：
+# np.searchsorted(a, v, side='left', sorter=None)
+# 在数组a中插入数组v（并不执行插入操作），返回一个下标列表，这个列表指明了v中对应元素应该插入在a中那个位置上
+# 查找应插入的一个值，该方法从左侧开始搜索，并返回第一个索引
+arr = np.array([6, 7, 8, 9])
+x = np.searchsorted(arr, 7)
+print(f"np.searchsorted({arr}, 7): {x}")
+
+# 从右侧搜索
+arr = np.array([6, 7, 8, 9])
+x = np.searchsorted(arr, 7, side='right')
+print(f"np.searchsorted({arr}, 7, side='right'): {x}")
+
+# 要搜索多个值，请使用拥有指定值的数组。
+arr = np.array([1, 3, 5, 7])
+x = np.searchsorted(arr, [2, 4, 6])
+print(f"np.searchsorted({arr}, [2, 4, 6]): {x}")
+
+###################################################################
+###################################################################
+'''
+数组排序
+
+排序是指将元素按有序顺序排列。
+有序序列是拥有与元素相对应的顺序的任何序列，例如数字或字母、升序或降序。
+NumPy ndarray 对象有一个名为 sort() 的函数，该函数将对指定的数组进行排序。
+'''
+# 对数组进行排序
+arr = np.array([3,2,7,1])
+print(f"np.sort({arr}): {np.sort(arr)}")
+
+# 对数组以字母顺序进行排序
+arr = np.array(["banana", "apple", "orange"])
+print(f"np.sort({arr}): {np.sort(arr)}")
+
+# 对bool数组进行排序
+arr = np.array([False, True, False])
+print(f"np.sort({arr}): {np.sort(arr)}")
+
+# 对2-D数组进行排序
+arr = np.array([[3,5,1], [6,4,8]])
+print(f"np.sort({arr}): {np.sort(arr)}")
+
+###################################################################
+###################################################################
+'''
+数组过滤
+
+从现有数组中取出一些元素并从中创建新数组称为过滤（filtering）。
+在 NumPy 中，使用布尔索引列表来过滤数组。
+布尔索引列表是与数组中的索引相对应的布尔值列表。
+如果索引处的值为 True，则该元素包含在过滤后的数组中；如果索引处的值为 False，则该元素将从过滤后的数组中排除。
+'''
+# 用索引0,2,4上的元素创建一个数组
+arr = np.array([1,2,3,4,5,6,7])
+x = [True, False, True, False, True, False, False]
+print("arr = np.array([1,2,3,4,5,6,7])")
+print("x = [True, False, True, False, True, False, False]")
+print(f"newarr = arr[x]: {arr[x]}")
+
+# 创建过滤器数组
+arr = np.array([1, 2, 3, 4, 5, 6, 7])
+# 创建一个空列表
+filter_arr = []
+# 遍历 arr 中的每个元素
+for element in arr:
+  # 如果元素可以被 2 整除，则将值设置为 True，否则设置为 False
+  if element % 2 == 0:
+    filter_arr.append(True)
+  else:
+    filter_arr.append(False)
+newarr = arr[filter_arr]
+print(filter_arr)
+print(newarr)
+
+# 直接从数组创建过滤器
+arr = np.array([61, 62, 63, 64, 65])
+filter_arr = arr > 62
+newarr = arr[filter_arr]
+print(filter_arr)
+print(newarr)
+
+# 创建一个过滤器数组，该数组仅返回原始数组中的偶数元素
+arr = np.array([1, 2, 3, 4, 5, 6, 7])
+filter_arr = arr % 2 == 0
+newarr = arr[filter_arr]
+print(filter_arr)
+print(newarr)
+
+###################################################################
+###################################################################
+'''
+
+什么是随机数？
+随机数并不意味着每次都有不同的数字。随机意味着无法在逻辑上预测的事物。
+
+伪随机和真随机
+计算机在程序上工作，程序是权威的指令集。因此，这意味着必须有某种算法来生成随机数。
+如果存在生成随机数的程序，则可以预测它，因此它就不是真正的随机数。
+通过生成算法生成的随机数称为伪随机数。
+
+我们可以生成真正的随机数吗？
+是的。为了在我们的计算机上生成一个真正的随机数，我们需要从某个外部来源获取随机数据。外部来源通常是我们的击键、鼠标移动、网络数据等。
+我们不需要真正的随机数，除非它与安全性（例如加密密钥）有关或应用的基础是随机性（例如数字轮盘赌轮）。
+在本教程中，我们将使用伪随机数。
+'''
+# NumPy 提供了 random 模块来处理随机数。生成一个0~100的随机整数
+print(f"np.random.randint(100): {np.random.randint(100)}")
+
+# 生成一个0~1的随机浮点数
+print(f"np.random.rand(): {np.random.rand()}")
+
+# 生成随机数组，randint() 方法接受 size 参数，您可以在其中指定数组的形状。
+print(f"np.random.randint(100, size=(5): {np.random.randint(100, size=(2,5))}")
+
+# rand()允许指定数组的形状
+print(f"np.random.rand(2,3): {np.random.rand(2,3)}")
+
+# 从数组生成随机数，choice()
+x = [6,1,7,2,8]
+print(f"np.random.choice({x}): {np.random.choice(x)}")
+
+# choice()方法还可以返回一个数组
+print(f"np.random.choice({x}, size=(2,4)): {np.random.choice(x, size=(2,4))}")
+
+###################################################################
+###################################################################
+'''
+
+什么是 ufuncs？
+ufuncs 指的是“通用函数”（Universal Functions），它们是对 ndarray 对象进行操作的 NumPy 函数。
+
+为什么要使用 ufuncs？
+ufunc 用于在 NumPy 中实现矢量化，这比迭代元素要快得多。
+它们还提供广播和其他方法，例如减少、累加等，它们对计算非常有帮助。
+ufuncs 还接受其他参数，比如：
+where 布尔值数组或条件，用于定义应在何处进行操作。
+dtype 定义元素的返回类型。
+out 返回值应被复制到的输出数组。
+
+什么是向量化？
+将迭代语句转换为基于向量的操作称为向量化。
+由于现代 CPU 已针对此类操作进行了优化，因此速度更快。
+
+对两个列表的元素进行相加：
+list 1: [1, 2, 3, 4]
+list 2: [4, 5, 6, 7]
+一种方法是遍历两个列表，然后对每个元素求和。
+
+对此，NumPy 有一个 ufunc，名为 add(x, y)，它会输出相同的结果。
+'''
+x = [1,2,3,4]
+y = [5,6,7,8]
+print(f"np.add({x},{y}): {np.add(x,y)}")
